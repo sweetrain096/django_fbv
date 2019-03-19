@@ -1,0 +1,9 @@
+{% extends 'boards/base.html' %}
+{% block body %}
+<h1>게시글 목록</h1>
+{% for board in boards %}
+    <p>{{ borad.pk }}</p>
+    <p>{{ board.title }}</p>
+    <hr>
+{% endfor %}
+{% endblock %}
