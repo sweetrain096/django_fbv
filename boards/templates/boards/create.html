@@ -1,0 +1,9 @@
+{% extends 'boards/base.html' %}
+{% block body %}
+<form action="{% url 'boards:create' %}" method="POST">
+    {% csrf_token %}
+    {{ board_form.as_p }}
+    <input type="submit">
+</form>
+
+{% endblock %}
