@@ -20,11 +20,12 @@ def create(request):
         '''
         board_form = BoardForm(request.POST)
         if board_form.is_valid():
-            title = board_form.cleaned_data.get('title')
-            content = board_form.cleaned_data.get('content')
-            board = Board(title=title, content=content)
-            board.save()
+            # title = board_form.cleaned_data.get('title')
+            # content = board_form.cleaned_data.get('content')
+            # board = Board(title=title, content=content)
+            # board.save()
             # return redirect('boards:detail' board.pk)
+            board = board_form.save()
             return redirect(board)
     else:
         board_form = BoardForm()
@@ -57,17 +58,18 @@ def update(request, board_pk):
     # 2. POST 요청이면 (사용자가 form을 통해 데이터를 보내 준 것.)
     if request.method == 'POST':
         # 사용자 입력 값(request.POST)을 BoardForm에 전달해주고,
-        board_form = BoardForm(request.POST)
+        board_form = BoardForm(request.POST, instance=board)
         # 그 값을 검증한다.(유효성 체크)
         if board_form.is_valid():
-            board.title = board_form.cleaned_data.get('title')
-            board.content = board_form.cleaned_data.get('content')
-            board.save()
+            # board.title = board_form.cleaned_data.get('title')
+            # board.content = board_form.cleaned_data.get('content')
+            # board.save()
+            board = board_form.save()
             return redirect(board)
     # 2-2. GET 요청이면, (수정하기 버튼을 눌렀을 때)
     else:
         # BoardForm을 초기화(사용자 입력값을 넣어준 상태)
-        board_form = BoardForm(initial=board.__dict__)
+        board_form = BoardForm(instance=board)
         # board_form = BoardForm(initial={'title' : board.title, 'content' : board.content})
     # context에 담겨있는 board_form은 두 가지 상황이 있다.
     # 1 - POST 요청에서 검증에 실패하였을 때, 오류 메세지가 포함된 상태
