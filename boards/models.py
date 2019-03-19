@@ -5,7 +5,7 @@ from django.urls import reverse
 class Board(models.Model):
     title = models.CharField(max_length=10)
     content = models.TextField()
-    hit = models.IntegerField(default=0)
+    hit = models.IntegerField(default=0, editable=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     
