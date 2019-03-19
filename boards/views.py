@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .models import Board
 from .forms import BoardForm
 
@@ -24,8 +24,19 @@ def create(request):
             content = board_form.cleaned_data.get('content')
             board = Board(title=title, content=content)
             board.save()
-            return redirect('boards:index')
+            # return redirect('boards:detail' board.pk)
+            return redirect(board)
     else:
         board_form = BoardForm()
     context = {'board_form' : board_form}
     return render(request, 'boards/create.html', context)
+    
+def detail(request, board_pk):
+    # board = Board.objects.get(pk=board_pk)
+    board = get_object_or_404(Board, pk=board_pk)
+    board.hit += 1
+    board.save()
+    context = {'board' : board}
+    return render(request, 'boards/detail.html', context)
+    
+    

@@ -1,0 +1,11 @@
+{% extends 'boards/base.html' %}
+
+{% block body %}
+
+<h1>{{ board.pk }}번째 글</h1>
+<h2>{{ board.title }}</h2>
+<p>조회수 : {{ board.hit }}</p>
+<hr>
+<p>{{ board.content }}</p>
+
+{% endblock %}

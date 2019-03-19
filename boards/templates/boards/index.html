@@ -7,6 +7,7 @@
 {% for board in boards %}
     <p>{{ board.pk }}</p>
     <p>{{ board.title }} | {{ board.hit }}</p>
+    <a href="{% url 'boards:detail' board.pk %}">글 보러 가기</a>
     <hr>
 {% endfor %}
 {% endblock %}
