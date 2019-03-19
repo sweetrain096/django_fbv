@@ -1,5 +1,6 @@
 {% extends 'boards/base.html' %}
 {% block body %}
+{% load crispy_forms_tags %}
 {% if request.resolver_match.url_name == 'create' %}
     <h1>글 생성</h1>
 {% else %}
@@ -7,7 +8,7 @@
 {% endif %}
 <form method="POST">
     {% csrf_token %}
-    {{ board_form.as_p }}
+    {{ board_form|crispy }}
     <input type="submit">
 </form>
 {% endblock %}
