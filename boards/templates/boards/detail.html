@@ -7,5 +7,8 @@
 <p>조회수 : {{ board.hit }}</p>
 <hr>
 <p>{{ board.content }}</p>
-
+<form action="{% url 'boards:delete' board.pk %}" method="POST">
+    {% csrf_token %}
+    <input type="submit" value="삭제">
+</form>    
 {% endblock %}

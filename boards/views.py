@@ -39,4 +39,11 @@ def detail(request, board_pk):
     context = {'board' : board}
     return render(request, 'boards/detail.html', context)
     
-    
+
+def delete(request, board_pk):
+    board = get_object_or_404(Board, pk=board_pk)
+    if request.method == 'POST':
+        board.delete()
+        return redirect('boards:index')
+    else:
+        return redirect(board)
