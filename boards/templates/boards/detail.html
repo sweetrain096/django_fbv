@@ -7,8 +7,11 @@
 <p>조회수 : {{ board.hit }}</p>
 <hr>
 <p>{{ board.content }}</p>
+<a href="{% url 'boards:index' %}">목록 가기</a>
 <form action="{% url 'boards:delete' board.pk %}" method="POST">
     {% csrf_token %}
     <input type="submit" value="삭제">
-</form>    
+</form>
+<a href="{% url 'boards:update' board.pk %}">수정</a>
+
 {% endblock %}
