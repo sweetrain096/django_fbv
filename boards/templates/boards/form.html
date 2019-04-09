@@ -7,32 +7,33 @@
     <h1>글 수정</h1>
 {% endif %}
 {% crispy board_form %}
-<form method="POST">
-    {% csrf_token %}
-    {{ board_form|crispy }}
-    <input type="submit">
-</form>
-
-<form method="POST">
-    {% csrf_token %}
-    {% for field in board_form %}
-        <div class="col-6">
-        {{ field.errors }}
-        {{ field.label_tag }} {{ field }}
-        </div>
-    {% endfor %}
-</form>
+<!--<form method="POST">-->
+<!--    {% csrf_token %}-->
+<!--    {{ board_form|crispy }}-->
+<!--    <input type="submit">-->
+<!--</form>-->
 
 
-<form method="POST">
-    {% csrf_token %}
-    <div class="row">
-        <div class="col-2">
-        {{ board_form.title }}
-        </div>
-        <div class="col-10">
-        {{ board_form.content }}
-        </div>
-    </div>
-</form>
+<!--<form method="POST">-->
+<!--    {% csrf_token %}-->
+<!--    {% for field in board_form %}-->
+<!--        <div class="col-6">-->
+<!--        {{ field.errors }}-->
+<!--        {{ field.label_tag }} {{ field }}-->
+<!--        </div>-->
+<!--    {% endfor %}-->
+<!--</form>-->
+
+
+<!--<form method="POST">-->
+<!--    {% csrf_token %}-->
+<!--    <div class="row">-->
+<!--        <div class="col-2">-->
+<!--        {{ board_form.title }}-->
+<!--        </div>-->
+<!--        <div class="col-10">-->
+<!--        {{ board_form.content }}-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</form>-->
 {% endblock %}

@@ -1,13 +1,17 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 
 from .models import Board
 from .forms import BoardForm
 
+plus = False
 # Create your views here.
 def index(request):
     boards = Board.objects.order_by('-pk')
     context = {'boards' : boards}
+    print(request.user.id)
+    
     return render(request, 'boards/index.html', context)
 
 @login_required
@@ -30,7 +34,14 @@ def create(request):
             # board = Board(title=title, content=content)
             # board.save()
             # return redirect('boards:detail' board.pk)
-            board = board_form.save()
+            
+            
+            # board_form.user = request.user
+            # board.save()
+            
+            board = board_form.save(commit=False)
+            board.user = request.user
+            board.save()
             return redirect(board)
     else:
         board_form = BoardForm()
@@ -48,11 +59,31 @@ def detail(request, board_pk):
 
 def delete(request, board_pk):
     board = get_object_or_404(Board, pk=board_pk)
+    # board = Board.objects.get(pk=board_pk)
+    
     if request.method == 'POST':
-        board.delete()
-        return redirect('boards:index')
-    else:
-        return redirect(board)
+        if request.user.is_superuser:
+            board.delete()
+            messages.success(request, '삭제되었습니다.')
+            return redirect('boards:index')
+        if board.user == request.user:
+            board.delete()
+            messages.success(request, '삭제되었습니다.')
+            return redirect('boards:index')
+            
+    # messages.add_message(request, messages.SUCCESS, '유효하지 않은 접근입니다.')
+    # messages.success(request, '유효하지 않은 접근입니다.')
+    messages.warning(request, '유효하지 않은 접근입니다.')
+
+    return redirect(board)
+    
+    
+    
+    # if request.method == 'POST':
+    #     board.delete()
+    #     return redirect('boards:index')
+    # else:
+    #     return redirect(board)
         
 def update(request, board_pk):
     # 1. board_pk에 해당하는 오브젝트를 가져온다.
