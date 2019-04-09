@@ -1,0 +1,9 @@
+{% extends 'boards/base.html' %}
+{% block body %}
+{% load crispy_forms_tags %}
+<form method="POST">
+    {% csrf_token %}
+    {{ user_form|crispy }}
+    <input type="submit" value="회원가입신청">
+</form>
+{% endblock %}

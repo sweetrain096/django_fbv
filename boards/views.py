@@ -1,4 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
+
 from .models import Board
 from .forms import BoardForm
 
@@ -7,8 +9,11 @@ def index(request):
     boards = Board.objects.order_by('-pk')
     context = {'boards' : boards}
     return render(request, 'boards/index.html', context)
-    
+
+@login_required
 def create(request):
+    # if not request.user.is_authenticated:
+    #     return redirect('boards:index')
     if request.method == 'POST':
         '''
         # 앞으로는 request.POST를 사용하지 않을것.
