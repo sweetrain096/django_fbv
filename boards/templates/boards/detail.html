@@ -1,32 +1,99 @@
 {% extends 'boards/base.html' %}
+{% block title %}{{ board.title }}{% endblock %}
+{% block css %}
+
+<style>
+    pre{
+        font-family: 'Noto Serif KR', serif;
+        height:100px;
+        line-height:150%;
+    }
+    #index{
+        font-family: 'Nanum Myeongjo', serif;
+    }
+    
+    #collaps a:link { color: white; text-decoration: none; }
+    #collaps a:visited { color: white; text-decoration: none; }
+    #collaps a:hover { color: purple; text-decoration: underline; }
+    #collaps a:active { color: white; background-color: rgb(96, 103, 157); }
+</style>
+
+{% endblock %}
 
 {% block body %}
+<p>
+    <button style="border-color:rgb(96, 103, 157); color:rgb(96, 103, 157);" class="btn btn-outline btn-sm" type="button" data-toggle="collapse" data-target="#collaps" aria-expanded="false" aria-controls="collaps">
+    plus
+    </button>
+</p>
+<div class="collapse mb-5" id="collaps">
+    <div class="card card-body" style="background-color:rgb(161, 144, 180)">
+    {% for board_one in boards %}
+    <a href="{% url 'boards:detail' board_one.pk %}">{{ board_one.title }}</a><hr>
+    {% endfor %}
+    
+    </div>
+</div>
+
 <div class="row">
     <div class="col-1"><h2>{{ board.pk }}</h2></div>
-    <div class="col-7"><h1>| {{ board.title }}</h1></div>
+    <div class="col-7"><h2>| {{ board.title }}</h2></div>
+</div>
+<div class="row d-flex justify-content-end">
     <div class="col-2">작성자 : {{ board.user }}</div>
     <div class="col-2">조회수 : {{ board.hit }}</div>
 </div>
+
 <hr>
 <div class="container">
     <pre>{{ board.content }}</pre>
 
 </div>
 <hr>
+
 <div class="row">
     <div class="col-9"></div>
-    <div class="col-1">
+    <div class="col-3 d-flex justify-content-around">
         <a href="{% url 'boards:index' %}" class="btn btn-outline-info btn-sm" role="button">목록</a>
-    </div>
-    <div class="col-1"><a href="{% url 'boards:update' board.pk %}" class="btn btn-outline-warning btn-sm" role="button">수정</a></div>
-    <div class="col-1">
-        <form action="{% url 'boards:delete' board.pk %}" method="POST">
+        <a href="{% url 'boards:update' board.pk %}" class="btn btn-outline-warning btn-sm" role="button">수정</a>
+        <form action="{% url 'boards:delete' board.pk %}" method="POST" style='display:inline'>
         {% csrf_token %}
         <input type="submit" class="btn btn-outline-danger btn-sm" value="삭제">
         </form>
     </div>
-    
 </div>
+
+
+<form class="form-inline my-3" action="{% url 'boards:new_comments' board.pk%}" method="POST" >
+{% csrf_token %}
+    <div class="col-10">
+        <input name="content" type="text" class="form-control" style="width:100%" placeholder="댓글을 작성해주세요" >
+    </div>
+    <div class="col-2">
+        <button type="submit" class="btn btn-outline-info btn-sm">등록!</button>
+
+    </div>
+</form>
+    
+
+
+
+{% if comments %}
+<p>댓글</p>
+{% for comment in comments %}
+<div class="row my-3">
+    <div class="col-2">{{ comment.user }}</div>
+    <div class="col-8">{{ comment.content }}</div>
+    <div class="col-2">
+        <form action="{% url 'boards:comments_delete' board.pk comment.pk %}" method="POST" style='display:inline' onsubmit="return confirm('삭제할거야?')">
+        {% csrf_token %}
+        <input type="submit" class="btn btn-outline-danger btn-sm" value="삭제">
+        </form>
+    </div>
+</div>
+{% endfor %}
+
+{% endif %}
 
 
 

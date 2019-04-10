@@ -1,0 +1,54 @@
+{% extends 'boards/base.html' %}
+{% block title %} user list {% endblock %}
+
+{% block css %}
+    
+    <style>
+        h1{
+            font-family: 'Noto Serif KR', serif;
+        }
+        #index{
+            font-family: 'Nanum Myeongjo:800', serif;
+        }
+    </style>
+{% endblock %}
+
+
+{% block body %}
+<h1>사용자 목록</h1>
+
+
+<div id="index" class="row my-3">
+    <div class="col-1">id</div>
+    <div class="col-2"></div>
+    <div class="col-5">username</div>
+    <div class="col-2">작성 글 수</div>
+</div>
+
+
+{% for user in user_list %}
+<div class="row">
+    <div class="col-1">
+        {{ user.id }}
+    </div>
+    <div class="col-2">
+        {% load gravatar %}
+        <img src="https://s.gravatar.com/avatar/{{ user.email|makehash }}?s=50&d=https://d2jcw5q7j4vmo4.cloudfront.net/Jo68lEw1EbPdJa2AtD3ZnKXkStCNIxfxvKS_QglmKYXOV1TC7dtbSIhlMqjI_19Qobc=w50">
+                    
+    </div>
+    <div class="col-5">
+        {{ user.username }}
+    </div>
+    <div class="col-2">{{ user.cnt }}</div>
+</div>
+<hr>
+{% endfor %}
+
+<div class="row">
+    <div class="col-9"></div>
+    <div class="col-3 d-flex justify-content-end">
+        <a href="{% url 'boards:index' %}" class="btn btn-outline-info btn-sm" role="button">목록</a>
+
+    </div>
+</div>
+{% endblock %}

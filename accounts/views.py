@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 # from .forms import UserForm
+from django.contrib.auth.models import User
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth import login as auth_login
 from django.contrib.auth import logout as auth_logout
@@ -86,3 +87,19 @@ def password(request):
         user_form = PasswordChangeForm(request.user) # instance= 로 시작하기 않기 주의
     context = {'user_form' : user_form}
     return render(request, 'accounts/update.html', context)
+    
+    
+def userlist(request):
+    print(request.user)
+    users = User.objects.all()
+    for user in users:
+        user.cnt = len(user.board_set.all())
+    context = {'user_list' : users}
+    return render(request, 'accounts/userlist.html', context)
+
+def mypage(request, user_id):
+    # user = request.user
+    contents = request.user.board_set.all()
+    print(contents)
+    context = {'contents' : contents}
+    return render(request, 'accounts/mypage.html', context)

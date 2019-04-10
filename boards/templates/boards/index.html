@@ -3,38 +3,48 @@
 
 {% block css %}
     
-<head>
-    <style>
-        h1{
-            font-family: 'Noto Serif KR', serif;
-        }
-        #index{
-            font-family: 'Nanum Myeongjo', serif;
-        }
-    </style>
-</head>
+<style>
+    h1{
+        font-family: 'Noto Serif KR', serif;
+    }
+    #index{
+        font-family: 'Nanum Myeongjo', serif;
+    }
+    #list a:link { color: rgb(96, 103, 157); text-decoration: none; }
+    #list a:visited { color: rgb(96, 103, 157); text-decoration: none; }
+    #list a:hover { color: rgb(96, 103, 157); text-decoration: underline; }
+    #list a:active { color: rgb(96, 103, 157); }
+</style>
+
 {% endblock %}
 
 {% block body %}
 
 <h1>게시글 목록</h1>
 <div class="d-flex flex-row-reverse my-5">
-    <a href="{% url 'boards:create' %}" class="btn btn-outline-primary btn-sm" role="button">새 글 쓰기</a>
+    <a href="{% url 'boards:create' %}" class="btn btn-outline-info btn-sm" role="button">새 글 쓰기</a>
 </div>
 
 <div id="index" class="row my-3">
     <div class="col-1">번호</div>
-    <div class="col-8">제목</div>
+    <div class="col-6">제목</div>
     <div class="col-2">작성자</div>
-    <div class="col-1">조회수</div>
+    <div class="col-2">작성일</div>
+    <div class="col-1">hit</div>
 </div>
 
 
 {% for board in boards %}
-<div class="row">
+<div id="list" class="row">
     <div class="col-1">{{ board.pk }}</div>
-    <div class="col-8"><a href="{% url 'boards:detail' board.pk %}">{{ board.title }}</a></div>
+    <div class="col-6">
+        <a href="{% url 'boards:detail' board.pk %}">{{ board.title }}</a>
+        {% if board.hit >= 30 %}
+        <span class="badge badge" style="background-color:rgb(232, 189, 199); color:white">Hit</span>
+        {% endif %}
+    </div>
     <div class="col-2">{{ board.user }}</div>
+    <div class="col-2">{{ board.created_at|date:"M d, Y" }}</div>
     <div class="col-1">{{ board.hit }}</div>
 </div>
 <hr>

@@ -10,7 +10,7 @@ from django.conf import settings
 
 # Create your models here.
 class Board(models.Model):
-    title = models.CharField(max_length=10)
+    title = models.CharField(max_length=20)
     content = models.TextField()
     hit = models.IntegerField(default=0, editable=False)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -23,3 +23,17 @@ class Board(models.Model):
     def get_absolute_url(self):
         # 'self.pk/'
         return reverse('boards:detail', args=[self.pk])
+        
+class Comment(models.Model):
+    content = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    board = models.ForeignKey(Board, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    
+    def __str__(self):
+        return f'<Comment ({self.id})> : {self.content}'
+        
+
+        
+    

@@ -2,9 +2,9 @@
 {% block body %}
 {% load crispy_forms_tags %}
 {% if request.resolver_match.url_name == 'create' %}
-    <h1>글 생성</h1>
+    <h2>글 생성</h2>
 {% else %}
-    <h1>글 수정</h1>
+    <h2>글 수정</h2>
 {% endif %}
 {% crispy board_form %}
 <!--<form method="POST">-->

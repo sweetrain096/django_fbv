@@ -1,0 +1,67 @@
+{% extends 'boards/base.html' %}
+{% block title %} user list {% endblock %}
+
+{% block css %}
+    
+    <style>
+        h1{
+            font-family: 'Noto Serif KR', serif;
+        }
+        #index{
+            font-family: 'Nanum Myeongjo:800', serif;
+        }
+    </style>
+{% endblock %}
+
+
+{% block body %}
+<h1>My Page</h1>
+<div class="row d-flex justify-content-center">
+    {% load gravatar %}
+    <div class="my-5"><img src="https://s.gravatar.com/avatar/{{ user.email|makehash }}?s=250&d=https://d2jcw5q7j4vmo4.cloudfront.net/Jo68lEw1EbPdJa2AtD3ZnKXkStCNIxfxvKS_QglmKYXOV1TC7dtbSIhlMqjI_19Qobc=w250"></div>
+</div>
+
+
+<form>
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">username</label>
+        <label class="col-sm-10 col-form-label">{{user}}</label>
+    </div>
+    
+    <div class="form-group row">
+        <label for="staticEmail" class="col-sm-2 col-form-label">Email</label>
+        {% if user.email %}
+        <label for="staticEmail" class="col-sm-10 col-form-label">{{ user.email }}</label>
+        {% else %}
+        <label for="staticEmail" class="col-sm-10 col-form-label">None</label>
+        {% endif %}
+    </div>
+
+    <div class="form-group row">
+        <div class="col-sm-2">
+            <label class="col-form-label">작성한 글</label>
+        </div>
+        <div class="col-sm-10">
+            {% if contents %}
+            {% for content in contents %}
+                <label for="staticEmail" class="col-sm-10 col-form-label">{{ content.title }}</label>
+            {% endfor %}
+        
+            {% else %}
+            <label for="staticEmail" class="col-sm-10 col-form-label">None</label>
+            {% endif %}
+        </div>
+        
+    </div>
+</form>
+
+
+
+<div class="row">
+    <div class="col-9"></div>
+    <div class="col-3 d-flex justify-content-end">
+        <a href="{% url 'boards:index' %}" class="btn btn-outline-info btn-sm" role="button">목록</a>
+
+    </div>
+</div>
+{% endblock %}

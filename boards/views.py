@@ -3,17 +3,15 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 
-from .models import Board
-from .forms import BoardForm
+from .models import Board, Comment
+from .forms import BoardForm, CommentForm
 
 plus = False
 # Create your views here.
 def index(request):
     boards = Board.objects.order_by('-pk')
-
     context = {'boards' : boards}
     print(request.user.id)
-    
     return render(request, 'boards/index.html', context)
 
 @login_required
@@ -49,16 +47,20 @@ def create(request):
         board_form = BoardForm()
     context = {'board_form' : board_form}
     return render(request, 'boards/form.html', context)
-    
+
+@login_required
 def detail(request, board_pk):
     # board = Board.objects.get(pk=board_pk)
     board = get_object_or_404(Board, pk=board_pk)
     board.hit += 1
     board.save()
-    context = {'board' : board}
+    boards = Board.objects.order_by('-id')[:5]
+    print(boards)
+    comments = board.comment_set.all()
+    context = {'board' : board, 'boards' : boards, 'comments' : comments}
     return render(request, 'boards/detail.html', context)
     
-
+@login_required
 def delete(request, board_pk):
     board = get_object_or_404(Board, pk=board_pk)
     # board = Board.objects.get(pk=board_pk)
@@ -86,7 +88,8 @@ def delete(request, board_pk):
     #     return redirect('boards:index')
     # else:
     #     return redirect(board)
-        
+
+@login_required
 def update(request, board_pk):
     # 1. board_pk에 해당하는 오브젝트를 가져온다.
     #   - 없으면, 404 에러
@@ -115,5 +118,34 @@ def update(request, board_pk):
     context = {'board_form' : board_form}
     return render(request, 'boards/form.html', context)
     
-    
+@login_required
+def new_comments(request, board_pk):
+    board = Board.objects.get(pk=board_pk)
+    comment = Comment()
+    comment.content = request.POST.get('content')
+    comment.board = board
+    comment.user = request.user
+    comment.save()
+    return redirect('boards:detail', board.pk)
+    # comment_form = CommentForm()
+    # context = {'comment_form' : comment_form}
+    # return render(request, 'boards/detail.html', context)
 
+
+@login_required
+def comments_delete(request, board_pk, comment_pk):
+    comment = Comment.objects.get(pk=comment_pk)
+    
+    if request.method == 'POST':
+        if request.user.is_superuser:
+            comment.delete()
+            messages.success(request, '삭제되었습니다.')
+            return redirect('boards:detail', board_pk)
+        if comment.user == request.user:
+            comment.delete()
+            messages.success(request, '삭제되었습니다.')
+            return redirect('boards:detail', board_pk)
+            
+    messages.warning(request, '유효하지 않은 접근입니다.')
+
+    return redirect('boards:detail', board_pk)
