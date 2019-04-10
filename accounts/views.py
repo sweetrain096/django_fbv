@@ -5,9 +5,9 @@ from django.contrib.auth import login as auth_login
 from django.contrib.auth import logout as auth_logout
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, UserChangeForm, PasswordChangeForm
 from django.contrib.auth.decorators import login_required
-from django.views.decorators.http import require_http_methods
+from django.views.decorators.http import require_http_methods, require_POST
 
-from .forms import UserCustomChangeForm
+from .forms import UserCustomChangeForm, UserCustomCreationForm
 
 # Create your views here.
 @require_http_methods(["GET", "POST"])
@@ -15,13 +15,13 @@ def signup(request):
     if request.user.is_authenticated:
         return redirect('boards:index')
     if request.method == 'POST':
-        user_form = UserCreationForm(request.POST)
+        user_form = UserCustomCreationForm(request.POST)
         if user_form.is_valid():
             user = user_form.save()
             auth_login(request, user)
             return redirect('boards:index')
     else:
-        user_form = UserCreationForm()
+        user_form = UserCustomCreationForm()
     context = {'user_form' : user_form}
     return render(request, 'accounts/signup.html', context)
     
@@ -46,7 +46,8 @@ def logout(request):
 
 
 @login_required    
-@require_http_methods(["POST"])
+# @require_http_methods(["POST"])
+@require_POST
 def delete(request):
     request.user.delete()
 

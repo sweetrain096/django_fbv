@@ -6,4 +6,9 @@
     {{ user_form|crispy }}
     <input type="submit" value="프로필 수정">
 </form>
+
+<form action="{% url 'accounts:delete' %}" method="POST" onsubmit="return confirm('탈퇴할거야??')">
+    {% csrf_token %}
+    <input type="submit" value="회원 탈퇴">
+</form>
 {% endblock %}

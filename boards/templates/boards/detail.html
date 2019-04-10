@@ -1,18 +1,34 @@
 {% extends 'boards/base.html' %}
 
 {% block body %}
-
-<h1>{{ board.pk }}번째 글</h1>
-<h2>{{ board.title }}</h2>
-<p>작성자 : {{ board.user }}</p>
-<p>조회수 : {{ board.hit }}</p>
+<div class="row">
+    <div class="col-1"><h2>{{ board.pk }}</h2></div>
+    <div class="col-7"><h1>| {{ board.title }}</h1></div>
+    <div class="col-2">작성자 : {{ board.user }}</div>
+    <div class="col-2">조회수 : {{ board.hit }}</div>
+</div>
 <hr>
-<p>{{ board.content }}</p>
-<a href="{% url 'boards:index' %}">목록 가기</a>
-<form action="{% url 'boards:delete' board.pk %}" method="POST">
-    {% csrf_token %}
-    <input type="submit" value="삭제">
-</form>
-<a href="{% url 'boards:update' board.pk %}">수정</a>
+<div class="container">
+    <pre>{{ board.content }}</pre>
+
+</div>
+<hr>
+<div class="row">
+    <div class="col-9"></div>
+    <div class="col-1">
+        <a href="{% url 'boards:index' %}" class="btn btn-outline-info btn-sm" role="button">목록</a>
+    </div>
+    <div class="col-1"><a href="{% url 'boards:update' board.pk %}" class="btn btn-outline-warning btn-sm" role="button">수정</a></div>
+    <div class="col-1">
+        <form action="{% url 'boards:delete' board.pk %}" method="POST">
+        {% csrf_token %}
+        <input type="submit" class="btn btn-outline-danger btn-sm" value="삭제">
+        </form>
+    </div>
+    
+</div>
+
+
+
 
 {% endblock %}

@@ -11,6 +11,11 @@
     <style>
     @import url('https://fonts.googleapis.com/css?family=Nanum+Myeongjo:400,700,800|Noto+Serif+KR:200,300,400,700,900|Stylish&subset=korean');
     </style>
+    {% block css %}
+    {% endblock %}
+<!--    font-family: 'Stylish', sans-serif;-->
+<!--font-family: 'Noto Serif KR', serif;-->
+<!--font-family: 'Nanum Myeongjo', serif;-->
 </head>
     
 <body>
@@ -31,13 +36,12 @@
         <div class="row">
             <div class="col-2">
                 {% if user.is_authenticated %}
+                {% load gravatar %}
+                    <img src="https://s.gravatar.com/avatar/{{ user.email|makehash }}?s=150&d=https://d2jcw5q7j4vmo4.cloudfront.net/Jo68lEw1EbPdJa2AtD3ZnKXkStCNIxfxvKS_QglmKYXOV1TC7dtbSIhlMqjI_19Qobc=w150">
                     <h1>{{ user }}님</h1>
                     <a href="{% url 'accounts:logout' %}">로그아웃</a><br>
                     <a href="{% url 'accounts:update' %}">프로필 수정</a>
-                    <form action="{% url 'accounts:delete' %}" method="POST" onsubmit="return confirm('탈퇴할거야??')">
-                        {% csrf_token %}
-                        <input type="submit" value="회원 탈퇴">
-                    </form>
+                    
                 {% else %}
                     <a href="{% url 'accounts:signup' %}">회원가입</a><br>
                     <a href="{% url 'accounts:login' %}">로그인</a>

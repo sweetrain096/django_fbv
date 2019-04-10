@@ -1,3 +1,4 @@
+import hashlib
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
@@ -9,6 +10,7 @@ plus = False
 # Create your views here.
 def index(request):
     boards = Board.objects.order_by('-pk')
+
     context = {'boards' : boards}
     print(request.user.id)
     

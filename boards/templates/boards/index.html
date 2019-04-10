@@ -1,18 +1,28 @@
 {% extends 'boards/base.html' %}
-
-
 {% block title %} index {% endblock %}
+
+{% block css %}
+    
+<head>
+    <style>
+        h1{
+            font-family: 'Noto Serif KR', serif;
+        }
+        #index{
+            font-family: 'Nanum Myeongjo', serif;
+        }
+    </style>
+</head>
+{% endblock %}
 
 {% block body %}
 
 <h1>게시글 목록</h1>
-<div class="my-3">
-    <!--<button type="button" class="btn btn-outline-primary">Primary</button>-->
-    <a href="{% url 'boards:create' %}" class="btn btn-outline-primary" role="button">새 글 쓰기</a>
-    <!--<a href="{% url 'boards:create' %}">새 글 쓰기</a>-->
+<div class="d-flex flex-row-reverse my-5">
+    <a href="{% url 'boards:create' %}" class="btn btn-outline-primary btn-sm" role="button">새 글 쓰기</a>
 </div>
 
-<div class="row">
+<div id="index" class="row my-3">
     <div class="col-1">번호</div>
     <div class="col-8">제목</div>
     <div class="col-2">작성자</div>
