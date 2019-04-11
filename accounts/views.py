@@ -1,11 +1,13 @@
 from django.shortcuts import render, redirect
 # from .forms import UserForm
-from django.contrib.auth.models import User
+from django.contrib import messages
+from django.contrib.auth import get_user_model
+# from django.contrib.auth.models import User
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth import login as auth_login
 from django.contrib.auth import logout as auth_logout
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, UserChangeForm, PasswordChangeForm
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, UserChangeForm, PasswordChangeForm
 from django.views.decorators.http import require_http_methods, require_POST
 
 from .forms import UserCustomChangeForm, UserCustomCreationForm
@@ -20,7 +22,9 @@ def signup(request):
         if user_form.is_valid():
             user = user_form.save()
             auth_login(request, user)
+            messages.info(request, f'{user.username}님 회원가입이 되었습니다~')
             return redirect('boards:index')
+        messages.warning(request, f'양식을 다시 확인해주세요')
     else:
         user_form = UserCustomCreationForm()
     context = {'user_form' : user_form}
@@ -91,6 +95,7 @@ def password(request):
     
 def userlist(request):
     print(request.user)
+    User = get_user_model()
     users = User.objects.all()
     for user in users:
         user.cnt = len(user.board_set.all())
